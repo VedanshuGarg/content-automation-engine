@@ -3,6 +3,7 @@ package com.vedanshu.contentautomationengine.scheduler;
 import com.vedanshu.contentautomationengine.entity.PostStatus;
 import com.vedanshu.contentautomationengine.entity.ScheduledPost;
 import com.vedanshu.contentautomationengine.repository.ScheduledPostRepository;
+import com.vedanshu.contentautomationengine.service.SocialMediaPublishingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,10 +24,13 @@ import java.util.List;
 public class ContentScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(ContentScheduler.class);
-    private final ScheduledPostRepository repository;
 
-    public ContentScheduler(ScheduledPostRepository repository) {
+    private final ScheduledPostRepository repository;
+    private final SocialMediaPublishingService publishingService;
+
+    public ContentScheduler(ScheduledPostRepository repository, SocialMediaPublishingService publishingService) {
         this.repository = repository;
+        this.publishingService = publishingService;
     }
 
     /**
@@ -49,11 +53,7 @@ public class ContentScheduler {
         for (ScheduledPost post : pendingPosts) {
             log.info("Initiating publishing workflow for Post ID: {} to Platform: {}", post.getId(), post.getPlatform());
 
-            // We temporarily set status to DRAFT or a new 'PROCESSING' state here to prevent
-            // the next cron cycle from picking it up if the upload takes longer than 60 seconds
-            // (In a full distributed system, we would use a message queue like Kafka/RabbitMQ)
-
-            // TODO: Pass to SocialMediaPublishingService
+            publishingService.publishContent(post);
         }
     }
 }
