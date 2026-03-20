@@ -41,4 +41,36 @@ public class ScheduledPost {
     private String externalId; // The ID returned by YouTube/Instagram after publishing
 
     public ScheduledPost() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public SocialPlatform getPlatform() {
+        return platform;
+    }
+
+    public LocalDateTime getScheduledTime() {
+        return scheduledTime;
+    }
+
+    public PostStatus getStatus() {
+        return status;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
 }
